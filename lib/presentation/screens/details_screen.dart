@@ -114,7 +114,7 @@ class _DetailsScreenState extends State<DetailsScreen> {
                     Wrap(
                       spacing: 8,
                       runSpacing: 4,
-                      children: c.languages.entries.map((e) => Chip(label: Text('${e.key}: ${e.value}'))).toList(),
+                      children: c.languages.map.map((e) => Chip(label: Text('${e.key}: ${e.value}'))).toList(),
                     ),
                     const SizedBox(height: 16),
                   ],
@@ -124,7 +124,7 @@ class _DetailsScreenState extends State<DetailsScreen> {
                     Wrap(
                       spacing: 8,
                       runSpacing: 4,
-                      children: c.currencies.entries.map((e) => Chip(label: Text('${e.key}'))).toList(),
+                      children: c.currencies.map.map((e) => Chip(label: Text('${e.key}'))).toList(),
                     ),
                     const SizedBox(height: 16),
                   ],

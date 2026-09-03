@@ -15,7 +15,7 @@ class CountryRepositoryImpl implements CountryRepository {
 
   @override
   Future<List<CountryModel>> getAllCountries() async {
-    return await remoteDataSource.getAllCountries();
+    return await remoteDataSource.fetchAll();
   }
 
   @override

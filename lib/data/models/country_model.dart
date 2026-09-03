@@ -1,23 +1,22 @@
-
 import 'package:hive/hive.dart';
 
 class CountryModel extends HiveObject {
   final String name;
   final String flag;
   final int population;
-  final List<String> capital;
-  final String continent;
-  final Map<String, String> languages;
-  final Map<String, dynamic> currencies;
+  final String? capital;      // countries.dev: String (not List); 5 countries null
+  final String continent;     // from 'region' field
+  final List<String> languages; // countries.dev: array of {name, ...}; we keep names
+  final List<String> currencies; // countries.dev: array of {code, name, symbol}
   final double? area;
   final List<String> timezones;
-  final String callingCode;
+  final String callingCode;   // first of callingCodes[]
 
   CountryModel({
     required this.name,
     required this.flag,
     required this.population,
-    required this.capital,
+    this.capital,
     required this.continent,
     required this.languages,
     required this.currencies,
@@ -26,62 +25,56 @@ class CountryModel extends HiveObject {
     required this.callingCode,
   });
 
-    factory CountryModel.fromJson(Map<String, dynamic> json) {
+  factory CountryModel.fromJson(Map<String, dynamic> json) {
+    // countries.dev structure: https://countries.dev/countries
+    final languagesRaw = json['languages'] as List<dynamic>? ?? [];
+    final languages = languagesRaw
+        .map((e) => (e as Map)['name']?.toString() ?? '')
+        .where((s) => s.isNotEmpty)
+        .toList();
+
+    final currenciesRaw = json['currencies'] as List<dynamic>? ?? [];
+    final currencies = currenciesRaw
+        .map((e) {
+          final m = e as Map<dynamic, dynamic>;
+          final code = m['code']?.toString() ?? '';
+          final name = m['name']?.toString() ?? '';
+          return '$code ($name)';
+        })
+        .where((s) => s.isNotEmpty && s != ' ()')
+        .toList();
+
     return CountryModel(
-      name: json['name']['common'] ?? '',
-      flag: json['flags']['png'] ?? '',
-      population: json['population'] ?? 0,
-      capital: _parseStringList(json['capital']),
-      continent: (json['continents'] != null && (json['continents'] as List).isNotEmpty)
-          ? (json['continents'] as List).first.toString()
-          : '',
-      languages: json['languages'] != null
-          ? Map<String, String>.from(json['languages'])
-          : {},
-      currencies: json['currencies'] != null
-          ? Map<String, dynamic>.from(json['currencies'])
-          : {},
+      name: json['name'] ?? '',
+      flag: json['flags']?['png'] ?? '',
+      population: (json['population'] as num?)?.toInt() ?? 0,
+      capital: json['capital']?.toString(), // null allowed for 5 countries
+      continent: json['region'] ?? '',
+      languages: languages,
+      currencies: currencies,
       area: (json['area'] as num?)?.toDouble(),
-      timezones: _parseStringList(json['timezones']),
-      callingCode: _extractCallingCode(json),
+      timezones: (json['timezones'] as List<dynamic>?)
+              ?.map((e) => e.toString())
+              .toList() ??
+          [],
+      callingCode: (json['callingCodes'] as List<dynamic>?)?.isNotEmpty == true
+          ? json['callingCodes'].first.toString()
+          : '',
     );
   }
 
-  static List<String> _parseStringList(dynamic value) {
-    if (value == null) return [];
-    if (value is List) {
-      return value.map((e) => e.toString()).toList();
-    }
-    if (value is String) {
-      return [value];
-    }
-    return [];
-  }
-
-  static String _extractCallingCode(Map<String, dynamic> json) {
-    final idd = json['idd'] as Map<String, dynamic>?;
-    if (idd == null) return '';
-    final root = idd['root'] as String? ?? '';
-    final suffixes = idd['suffixes'] as List<dynamic>?;
-    if (suffixes == null || suffixes.isEmpty) return root;
-    final first = suffixes.first as String?;
-    return first != null ? '$root$first' : root;
-  }
-
-  Map<String, dynamic> toJson() {
-    return {
-      'name': {'common': name},
-      'flags': {'png': flag},
-      'population': population,
-      'capital': capital,
-      'continents': [continent],
-      'languages': languages,
-      'currencies': currencies,
-      'area': area,
-      'timezones': timezones,
-      'callingCode': callingCode,
-    };
-  }
+  Map<String, dynamic> toJson() => {
+    'name': name,
+    'flags': {'png': flag},
+    'population': population,
+    'capital': capital,
+    'region': continent,
+    'languages': languages,
+    'currencies': currencies,
+    'area': area,
+    'timezones': timezones,
+    'callingCodes': [callingCode],
+  };
 }
 
 class CountryModelAdapter extends TypeAdapter<CountryModel> {
@@ -96,10 +89,10 @@ class CountryModelAdapter extends TypeAdapter<CountryModel> {
       population: reader.read(),
       capital: reader.read(),
       continent: reader.read(),
-      languages: Map<String, String>.from(reader.read()),
-      currencies: Map<String, dynamic>.from(reader.read()),
+      languages: (reader.read() as List?)?.map((e) => e.toString()).toList() ?? [],
+      currencies: (reader.read() as List?)?.map((e) => e.toString()).toList() ?? [],
       area: reader.read(),
-      timezones: reader.read(),
+      timezones: (reader.read() as List?)?.map((e) => e.toString()).toList() ?? [],
       callingCode: reader.read(),
     );
   }
