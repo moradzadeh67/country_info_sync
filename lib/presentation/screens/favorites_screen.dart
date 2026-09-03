@@ -106,8 +106,7 @@ class _FavoritesScreenState extends State<FavoritesScreen> {
                               : const Icon(Icons.flag, size: 32),
                           title: Text(country.name),
                           subtitle: Text(
-                            country.capital.isNotEmpty ? country.capital.first : '',
-                            style: const TextStyle(fontSize: 12),
+                            country.capital ?? '',
                           ),
                           trailing: IconButton(
                             icon: const Icon(Icons.delete, color: Colors.red),

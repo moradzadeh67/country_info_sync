@@ -102,7 +102,7 @@ class _DetailsScreenState extends State<DetailsScreen> {
                     children: [
                       Chip(label: Text('Continent: ${c.continent}')),
                       Chip(label: Text('Population: ${c.population}')),
-                      Chip(label: Text('Capital: ${c.capital.isNotEmpty ? c.capital.first : 'N/A'}')),
+                      Chip(label: Text(c.capital ?? 'N/A')),
                       Chip(label: Text('Area: ${c.area?.toStringAsFixed(0) ?? 'N/A'} km²')),
                       Chip(label: Text('Code: +${c.callingCode}')),
                     ],
@@ -114,7 +114,7 @@ class _DetailsScreenState extends State<DetailsScreen> {
                     Wrap(
                       spacing: 8,
                       runSpacing: 4,
-                      children: c.languages.map.map((e) => Chip(label: Text('${e.key}: ${e.value}'))).toList(),
+                      children: c.languages.map((s) => Chip(label: Text(s))).toList(),
                     ),
                     const SizedBox(height: 16),
                   ],
@@ -124,7 +124,7 @@ class _DetailsScreenState extends State<DetailsScreen> {
                     Wrap(
                       spacing: 8,
                       runSpacing: 4,
-                      children: c.currencies.map.map((e) => Chip(label: Text('${e.key}'))).toList(),
+                      children: c.currencies.map((c) => Chip(label: Text(c))).toList(),
                     ),
                     const SizedBox(height: 16),
                   ],

@@ -35,7 +35,7 @@ class CountryCard extends StatelessWidget {
           style: const TextStyle(fontWeight: FontWeight.bold),
         ),
         subtitle: Text(
-          '${country.capital.isNotEmpty ? country.capital.first : ''} • ${country.continent}',
+          '${country.capital ?? ''} • ${country.continent}',
           style: const TextStyle(fontSize: 12, color: Colors.grey),
         ),
         trailing: IconButton(

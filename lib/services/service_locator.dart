@@ -17,7 +17,7 @@ class ServiceLocator {
 
   void init() {
     httpClient = http.Client();
-    remoteDataSource = CountryRemoteDataSource(client: httpClient);
+    remoteDataSource = CountryRemoteDataSource(); // countries.dev no param
     localDataSource = CountryLocalDataSource();
     repository = CountryRepositoryImpl(
       remoteDataSource: remoteDataSource,
