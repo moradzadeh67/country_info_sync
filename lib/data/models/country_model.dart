@@ -26,12 +26,12 @@ class CountryModel extends HiveObject {
     required this.callingCode,
   });
 
-  factory CountryModel.fromJson(Map<String, dynamic> json) {
+    factory CountryModel.fromJson(Map<String, dynamic> json) {
     return CountryModel(
       name: json['name']['common'] ?? '',
       flag: json['flags']['png'] ?? '',
       population: json['population'] ?? 0,
-      capital: List<String>.from(json['capital'] ?? []),
+      capital: _parseStringList(json['capital']),
       continent: (json['continents'] != null && (json['continents'] as List).isNotEmpty)
           ? (json['continents'] as List).first.toString()
           : '',
@@ -42,9 +42,20 @@ class CountryModel extends HiveObject {
           ? Map<String, dynamic>.from(json['currencies'])
           : {},
       area: (json['area'] as num?)?.toDouble(),
-      timezones: List<String>.from(json['timezones'] ?? []),
+      timezones: _parseStringList(json['timezones']),
       callingCode: _extractCallingCode(json),
     );
+  }
+
+  static List<String> _parseStringList(dynamic value) {
+    if (value == null) return [];
+    if (value is List) {
+      return value.map((e) => e.toString()).toList();
+    }
+    if (value is String) {
+      return [value];
+    }
+    return [];
   }
 
   static String _extractCallingCode(Map<String, dynamic> json) {
