@@ -1,22 +1,19 @@
 import 'package:flutter/material.dart';
 import 'package:hive_flutter/hive_flutter.dart';
-import 'package:country_info_sync/presentation/screens/home_screen.dart';
-import 'package:country_info_sync/presentation/screens/favorites_screen.dart';
-import 'package:country_info_sync/presentation/screens/details_screen.dart';
-import 'package:country_info_sync/services/service_locator.dart';
-import 'package:country_info_sync/data/models/country_model.dart';
+import 'package:google_fonts/google_fonts.dart';
+import 'package:flutter_localizations/flutter_localizations.dart';
+
+import 'country.dart';
+import 'home_screen.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
+
   await Hive.initFlutter();
-  
-  // Register Hive adapter for CountryModel
   if (!Hive.isAdapterRegistered(0)) {
-    Hive.registerAdapter(CountryModelAdapter());
+    Hive.registerAdapter(CountryAdapter());
   }
-  
-  // Initialize service locator
-  serviceLocator.init();
+
   runApp(const CountryInfoSyncApp());
 }
 
@@ -27,14 +24,21 @@ class CountryInfoSyncApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return MaterialApp(
       title: 'CountryInfo Sync',
+      debugShowCheckedModeBanner: false,
+      locale: const Locale('en', 'US'),
+      supportedLocales: const [Locale('en', 'US')],
+      localizationsDelegates: const [
+        GlobalMaterialLocalizations.delegate,
+        GlobalWidgetsLocalizations.delegate,
+        GlobalCupertinoLocalizations.delegate,
+      ],
       theme: ThemeData(
-        primarySwatch: Colors.blue,
+        textTheme: GoogleFonts.poppinsTextTheme(),
+        primarySwatch: Colors.indigo,
+        useMaterial3: true,
+        colorScheme: ColorScheme.fromSeed(seedColor: Colors.indigo),
       ),
       home: const HomeScreen(),
-      routes: {
-        DetailsScreen.routeName: (context) => const DetailsScreen(),
-        FavoritesScreen.routeName: (context) => const FavoritesScreen(),
-      },
     );
   }
 }
