@@ -1,52 +1,118 @@
 # 🌍 Country Info Sync
 
-A professional, offline-first Flutter application for exploring global country information, built using the **SSD (Specification-Driven Development)** methodology and **SPARC** workflow.
+![Country Info Sync Logo](assets/images/logo-256.png)
+
+A professional, offline-first Flutter application for exploring global country information.
 
 ## 📌 Project Overview
-Country Info Sync provides comprehensive and up-to-date information about countries worldwide. Designed with reliability in mind, it features a robust local caching system that ensures access to country data even when offline.
 
-## 🏗️ Methodology: SSD & SPARC
-This project follows the **SSD (Specification-Driven Development)** approach, ensuring all features are clearly specified before implementation. The **SPARC** workflow ensures a logical, maintainable, and simple codebase:
+Country Info Sync is a Flutter-based application that allows users to:
 
-1.  **S**etup: Project initialization and minimalist dependency management.
-2.  **P**ersistence: Designing simple data models and local storage with **Hive**.
-3.  **A**PI: Implementing stateless network services for data retrieval from `countries.dev`.
-4.  **R**eactivity: Managing state directly within the UI components for maximum simplicity.
-5.  **C**omponents: Building a beautiful, responsive, and intuitive interface with **Material 3** and **Poppins** typography.
+- Explore up-to-date information about countries worldwide
+- Search and filter countries instantly
+- View rich country details with flags and statistics
+- Access previously loaded data offline through local caching
 
 ## ✨ Key Features
-- 🌐 **Real-time Sync**: Fetches global country data from the **countries.dev API**.
-- 💾 **Offline-First**: Automatic local storage using **Hive** for instant offline access.
-- 🔍 **Smart Search**: Fast, case-insensitive search with relevance sorting (exact matches first).
-- 📱 **Modern UI**: A stylish, grid-based details view and card-based home screen using the **Poppins** font.
-- 🏳️ **Visual Identity**: High-quality flag displays with Hero animations for smooth transitions.
-- 📊 **Rich Details**: Includes Native Name, Population, Capital, Subregion, Languages, Currencies, Area, and Border Countries.
-- 📏 **Adaptive Layout**: Responsive text scaling for long country names using `FittedBox`.
+
+- 🌐 **Real-time Sync**: Fetches global country data from the `countries.dev` API
+- 💾 **Offline-First**: Automatic local storage using **Hive** for instant offline access
+- 🔍 **Smart Search**: Fast, case-insensitive search with relevance sorting (exact matches first)
+- 📱 **Modern UI**: Built with **Material 3** and **Poppins** typography
+- 🏳️ **Visual Identity**: Flag displays with Hero animations for smooth transitions
+- 📊 **Rich Details**: Native Name, Population, Capital, Subregion, Continent, Languages, Currencies, Area, Timezones, Calling Code, and Border Countries
+- 📏 **Adaptive Layout**: Responsive text scaling for long country names using `FittedBox`
 
 ## 🛠️ Tech Stack
-- **Flutter & Dart**
-- **Networking**: **http** package.
-- **Local Persistence**: **Hive** & **Hive Flutter**.
-- **Typography**: **Google Fonts (Poppins)**.
-- **Architecture**: Minimalist structure following the simplest correct solution principles.
+
+- **Flutter & Dart** (3.13.2+)
+- **Networking**: [`http`](https://pub.dev/packages/http) (REST API calls to `countries.dev`)
+- **Local Persistence**: [`hive`](https://pub.dev/packages/hive) & [`hive_flutter`](https://pub.dev/packages/hive_flutter)
+- **Typography**: [`google_fonts`](https://pub.dev/packages/google_fonts) (Poppins)
+- **Localization**: `flutter_localizations`
+- **Architecture**: Minimalist structure following the simplest correct solution principles
 
 ## 🚀 How to Run
-1.  **Clone the Repository**:
-    ```bash
-    git clone https://github.com/moradzadeh67/country_info_sync.git
-    ```
-2.  **Install Dependencies**:
-    ```bash
-    flutter pub get
-    ```
-3.  **Run the App**:
-    ```bash
-    flutter run
-    ```
+
+### Prerequisites
+
+- Flutter SDK (3.13.2+)
+- Dart 3.x
+- Platform-specific requirements:
+  - **Android**: Android SDK 21+
+  - **iOS**: Xcode 14+
+  - **macOS**: Xcode 14+
+  - **Web**: Any modern browser
+  - **Windows**: Windows 10+ (⚠️ Untested)
+  - **Linux**: (⚠️ Untested)
+
+### Installation
+
+```bash
+# Get dependencies
+flutter pub get
+
+# Run the app
+flutter run
+```
+
+### Build for Platforms
+
+```bash
+# Android
+flutter build apk
+
+# iOS
+flutter build ios
+
+# macOS
+flutter build macos
+
+# Windows
+flutter build windows
+
+# Linux
+flutter build linux
+
+# Web
+flutter build web
+```
 
 ## 📂 Project Structure
-- `lib/country.dart`: Unified data model with Native Name, Borders, and Hive adapter.
-- `lib/country_service.dart`: Simplified service for API sync and local caching.
-- `lib/home_screen.dart`: Searchable country list with modern card design and adaptive text.
-- `lib/details_screen.dart`: Beautifully organized multi-section country details with subregion and border info.
-- `lib/main.dart`: Clean entry point and theme configuration.
+
+```
+lib/
+├── main.dart                     # Entry point, Hive init & theme configuration
+├── models/
+│   └── country.dart              # Country data model + Hive adapter
+├── services/
+│   └── country_service.dart      # API sync and local caching
+├── screens/
+│   ├── home_screen.dart          # Searchable country list with modern card design
+│   └── details_screen.dart       # Multi-section country details view
+└── widgets/                      # Shared widgets (reserved)
+assets/
+└── images/                       # App logo (SVG + PNG variants)
+```
+
+## 📱 Supported Platforms
+
+| Platform | Icon | Status | Notes |
+|---|:---:|---|---|
+| 🤖 Android | ![Android Icon](assets/icons/android-icon.png) | ✅ **Tested** | Working perfectly on all devices |
+| 🍎 iOS | ![iOS Icon](assets/icons/ios-icon.png) | ✅ **Tested** | Working on iPhone & iPad |
+| 🌐 Web | ![Web Icon](assets/icons/web-icon.png) | ✅ **Tested** | Chrome, Firefox, Safari compatible |
+| 🖥️ macOS | ![macOS Icon](assets/icons/macos-icon.png) | ✅ **Tested** | Working on Intel & Apple Silicon |
+| 🪟 Windows | ![Windows Icon](assets/icons/windows-icon.png) | ❌ **Not tested** | Build available, awaiting testing |
+| 🐧 Linux | ![Linux Icon](assets/icons/linux-icon.png) | ❌ **Not tested** | Build available, awaiting testing |
+
+> **Note**: Android, iOS, Web, and macOS have been tested and work correctly. Windows and Linux builds are available but have not been tested yet.
+
+## 📝 License
+
+MIT License. See [LICENSE](LICENSE) for details.
+
+**Copyright © 2026 moradzadeh67**
+
+This project is open-source and free to use, modify, and distribute under the MIT License terms.
+

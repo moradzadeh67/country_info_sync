@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 
-import 'country.dart';
+import '../models/country.dart';
 
 class DetailsScreen extends StatelessWidget {
   final Country country;

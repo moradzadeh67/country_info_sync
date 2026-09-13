@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 
-import 'country.dart';
-import 'country_service.dart';
+import '../models/country.dart';
+import '../services/country_service.dart';
 import 'details_screen.dart';
 
 class HomeScreen extends StatefulWidget {

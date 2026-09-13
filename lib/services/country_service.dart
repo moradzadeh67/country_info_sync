@@ -3,7 +3,7 @@ import 'dart:convert';
 import 'package:http/http.dart' as http;
 import 'package:hive/hive.dart';
 
-import 'country.dart';
+import '../models/country.dart';
 
 class CountryService {
   static const String _apiUrl = 'https://countries.dev/countries';
