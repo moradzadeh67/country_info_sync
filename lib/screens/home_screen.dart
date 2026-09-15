@@ -169,7 +169,7 @@ class _HomeScreenState extends State<HomeScreen> {
           style: theme.textTheme.headlineSmall?.copyWith(color: Colors.white),
         ),
         elevation: 0,
-        backgroundColor: const Color(0xFF1A1A2E),
+        backgroundColor: const Color(0xFF6373BF),
         foregroundColor: Colors.white,
         actions: [
           IconButton(
@@ -192,14 +192,14 @@ class _HomeScreenState extends State<HomeScreen> {
         bottom: PreferredSize(
           preferredSize: const Size.fromHeight(80),
           child: Container(
-            color: const Color(0xFF1A1A2E),
+            color: const Color(0xFF6373BF),
             padding: EdgeInsets.symmetric(
               horizontal: AppSpacing.lg(context),
               vertical: AppSpacing.xs(context),
             ),
             child: Container(
               decoration: BoxDecoration(
-                color: Colors.transparent,
+                color: isDark ? const Color(0xFF1A1A2E) : Colors.white,
                 borderRadius: BorderRadius.circular(16),
                 border: isDark ? Border.all(color: Colors.white24, width: 1) : null,
                 boxShadow: isDark
