@@ -152,12 +152,12 @@ assets/
 
 | Platform | Status | Notes |
 |---|:---:|---|
-| <img src="assets/icons/android-icon.png" width="80" height="80" alt="Android"> | ✅ Tested | Working perfectly on all devices |
-| <img src="assets/icons/ios-icon.png" width="80" height="80" alt="iOS"> | ✅ Tested | Working on iPhone & iPad |
-| <img src="assets/icons/web-icon.png" width="80" height="80" alt="Web"> | ✅ Tested | Chrome, Firefox, Safari compatible |
-| <img src="assets/icons/macos-icon.png" width="80" height="80" alt="macOS"> | ✅ Tested | Working on Apple Silicon |
-| <img src="assets/icons/windows-icon.png" width="80" height="80" alt="Windows"> | ❌ Not tested | Build available |
-| <img src="assets/icons/linux-icon.png" width="80" height="80" alt="Linux"> | ❌ Not tested | Build available |
+| <img src="assets/icons/android-icon.png" width="35" height="35" alt="Android"> | ✅ Tested | Working perfectly on all devices |
+| <img src="assets/icons/ios-icon.png" width="35" height="35" alt="iOS"> | ✅ Tested | Working on iPhone & iPad |
+| <img src="assets/icons/web-icon.png" width="35" height="35" alt="Web"> | ✅ Tested | Chrome, Firefox, Safari compatible |
+| <img src="assets/icons/macos-icon.png" width="35" height="35" alt="macOS"> | ✅ Tested | Working on Apple Silicon |
+| <img src="assets/icons/windows-icon.png" width="35" height="35" alt="Windows"> | ❌ Not tested | Build available |
+| <img src="assets/icons/linux-icon.png" width="35" height="35" alt="Linux"> | ❌ Not tested | Build available |
 
 > Android, iOS, Web, and macOS tested. Windows & Linux builds available but untested.
 
