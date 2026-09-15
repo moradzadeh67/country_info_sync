@@ -169,6 +169,8 @@ class _HomeScreenState extends State<HomeScreen> {
           style: theme.textTheme.headlineSmall?.copyWith(color: Colors.white),
         ),
         elevation: 0,
+        scrolledUnderElevation: 0,
+        surfaceTintColor: Colors.transparent,
         backgroundColor: isDark ? const Color(0xFF1F2235) : const Color(0xFF6373BF),
         foregroundColor: Colors.white,
         actions: [
