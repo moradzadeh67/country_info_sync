@@ -68,7 +68,7 @@ class _CountryCardState extends State<CountryCard> with SingleTickerProviderStat
           decoration: BoxDecoration(
             color: widget.isSelected
                 ? theme.colorScheme.primaryContainer.withValues(alpha: isDark ? 0.3 : 0.1)
-                : (isDark ? theme.colorScheme.surfaceContainer : const Color(0xFFF2F6FD)),
+                : (isDark ? const Color(0xFF1E1E1E) : const Color(0xFFF2F6FD)),
             borderRadius: BorderRadius.circular(20),
             border: widget.isSelected
                 ? Border.all(color: theme.colorScheme.primary, width: 2)
@@ -191,7 +191,7 @@ class _CountryCardState extends State<CountryCard> with SingleTickerProviderStat
                         widget.isFavorite ? Icons.favorite : Icons.favorite_border,
                         color: widget.isFavorite
                             ? Colors.red
-                            : (isDark ? Colors.white38 : Colors.grey),
+                            : (isDark ? const Color(0xFFCCCCCC) : Colors.grey),
                       ),
                       onPressed: () {
                         HapticFeedback.selectionClick();
@@ -201,7 +201,7 @@ class _CountryCardState extends State<CountryCard> with SingleTickerProviderStat
                     Icon(
                       Icons.arrow_forward_ios,
                       size: 16,
-                      color: isDark ? theme.colorScheme.primary : Colors.indigo,
+                      color: isDark ? Colors.white54 : Colors.indigo,
                     ),
                   ],
                 ),

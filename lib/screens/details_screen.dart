@@ -76,14 +76,14 @@ class _DetailsScreenState extends State<DetailsScreen> {
     final isDark = theme.brightness == Brightness.dark;
 
     return Scaffold(
-      backgroundColor: isDark ? theme.colorScheme.surface : const Color(0xFFDAE0EA),
+      backgroundColor: isDark ? const Color(0xFF121212) : const Color(0xFFDAE0EA),
       appBar: AppBar(
         title: Text(
           'Country Details',
           style: theme.textTheme.titleMedium?.copyWith(color: Colors.white),
         ),
         elevation: 0,
-        backgroundColor: isDark ? const Color(0xFF1A1A2E) : const Color(0xFF6373BF),
+        backgroundColor: isDark ? const Color(0xFF1F2235) : const Color(0xFF6373BF),
         foregroundColor: Colors.white,
         actions: [
           IconButton(
@@ -108,7 +108,7 @@ class _DetailsScreenState extends State<DetailsScreen> {
                   height: AppSpacing.heroFlagHeight(context),
                   width: double.infinity,
                   decoration: BoxDecoration(
-                    color: isDark ? Colors.white10 : const Color(0xFFE9F0FA),
+                    color: isDark ? const Color(0xFF1E1E1E) : const Color(0xFFE9F0FA),
                     borderRadius: BorderRadius.circular(28),
                     border: Border.all(
                       color: isDark ? Colors.white24 : const Color(0xFFC5D2E8),
@@ -296,7 +296,7 @@ class _DetailsScreenState extends State<DetailsScreen> {
       margin: EdgeInsets.only(bottom: AppSpacing.sm(context)),
       padding: EdgeInsets.all(AppSpacing.lg(context)),
       decoration: BoxDecoration(
-        color: isDark ? theme.colorScheme.surfaceContainer : Colors.white,
+        color: isDark ? const Color(0xFF1E1E1E) : Colors.white,
         borderRadius: BorderRadius.circular(20),
         boxShadow: isDark
             ? []

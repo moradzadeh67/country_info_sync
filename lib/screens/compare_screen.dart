@@ -22,7 +22,7 @@ class CompareScreen extends StatelessWidget {
 
     if (countries.isEmpty) {
       return Scaffold(
-        backgroundColor: isDark ? theme.colorScheme.surface : const Color(0xFFDAE0EA),
+        backgroundColor: isDark ? const Color(0xFF121212) : const Color(0xFFDAE0EA),
         appBar: AppBar(title: const Text('Compare')),
         body: const Center(child: Text('No countries selected')),
       );
@@ -30,7 +30,7 @@ class CompareScreen extends StatelessWidget {
 
     if (countries.length == 1) {
       return Scaffold(
-        backgroundColor: isDark ? theme.colorScheme.surface : const Color(0xFFDAE0EA),
+        backgroundColor: isDark ? const Color(0xFF121212) : const Color(0xFFDAE0EA),
         appBar: AppBar(title: const Text('Compare')),
         body: const Center(child: Text('Select at least 2 countries to compare')),
       );
@@ -40,13 +40,13 @@ class CompareScreen extends StatelessWidget {
     final c2 = countries[1];
 
     return Scaffold(
-      backgroundColor: isDark ? theme.colorScheme.surface : const Color(0xFFDAE0EA),
+      backgroundColor: isDark ? const Color(0xFF121212) : const Color(0xFFDAE0EA),
       appBar: AppBar(
         title: Text(
           'Compare Countries',
           style: theme.textTheme.headlineSmall?.copyWith(color: Colors.white),
         ),
-        backgroundColor: const Color(0xFF6373BF),
+        backgroundColor: isDark ? const Color(0xFF1F2235) : const Color(0xFF6373BF),
         elevation: 0,
         foregroundColor: Colors.white,
       ),
@@ -159,7 +159,7 @@ class CompareScreen extends StatelessWidget {
     return Container(
       padding: EdgeInsets.all(AppSpacing.sm(context)),
       decoration: BoxDecoration(
-        color: isDark ? theme.colorScheme.surfaceContainer : const Color(0xFFF2F6FD),
+        color: isDark ? const Color(0xFF1E1E1E) : const Color(0xFFF2F6FD),
         borderRadius: BorderRadius.circular(20),
         boxShadow: isDark
             ? []
@@ -231,7 +231,7 @@ class CompareScreen extends StatelessWidget {
       margin: EdgeInsets.only(bottom: AppSpacing.sm(context)),
       padding: EdgeInsets.all(AppSpacing.md(context)),
       decoration: BoxDecoration(
-        color: isDark ? theme.colorScheme.surfaceContainer : Colors.white,
+        color: isDark ? const Color(0xFF1E1E1E) : Colors.white,
         borderRadius: BorderRadius.circular(20),
         boxShadow: isDark
             ? []

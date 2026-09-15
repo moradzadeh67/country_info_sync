@@ -19,7 +19,7 @@ class HeritageCard extends StatelessWidget {
       margin: EdgeInsets.only(bottom: AppSpacing.sm(context)),
       padding: EdgeInsets.all(AppSpacing.lg(context)),
       decoration: BoxDecoration(
-        color: isDark ? theme.colorScheme.surfaceContainer : Colors.white,
+        color: isDark ? const Color(0xFF1E1E1E) : Colors.white,
         borderRadius: BorderRadius.circular(20),
         boxShadow: isDark
             ? []
@@ -88,7 +88,7 @@ class _InsightCardState extends State<InsightCard> {
       width: double.infinity,
       padding: EdgeInsets.all(AppSpacing.md(context)),
       decoration: BoxDecoration(
-        color: isDark ? widget.theme.colorScheme.surfaceContainer : Colors.white,
+        color: isDark ? const Color(0xFF1E1E1E) : Colors.white,
         borderRadius: BorderRadius.circular(20),
         boxShadow: isDark
             ? []
@@ -194,7 +194,7 @@ class InfoTile extends StatelessWidget {
     return Container(
       padding: EdgeInsets.all(AppSpacing.sm(context)),
       decoration: BoxDecoration(
-        color: isDark ? theme.colorScheme.surfaceContainer : Colors.white,
+        color: isDark ? const Color(0xFF1E1E1E) : Colors.white,
         borderRadius: BorderRadius.circular(20),
         boxShadow: isDark
             ? []

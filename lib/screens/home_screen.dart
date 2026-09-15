@@ -162,14 +162,14 @@ class _HomeScreenState extends State<HomeScreen> {
     final isDark = theme.brightness == Brightness.dark;
 
     return Scaffold(
-      backgroundColor: isDark ? theme.colorScheme.surface : const Color(0xFFDAE0EA),
+      backgroundColor: isDark ? const Color(0xFF121212) : const Color(0xFFDAE0EA),
       appBar: AppBar(
         title: Text(
           'Explorer',
           style: theme.textTheme.headlineSmall?.copyWith(color: Colors.white),
         ),
         elevation: 0,
-        backgroundColor: const Color(0xFF6373BF),
+        backgroundColor: isDark ? const Color(0xFF1F2235) : const Color(0xFF6373BF),
         foregroundColor: Colors.white,
         actions: [
           IconButton(
@@ -192,14 +192,14 @@ class _HomeScreenState extends State<HomeScreen> {
         bottom: PreferredSize(
           preferredSize: const Size.fromHeight(80),
           child: Container(
-            color: const Color(0xFF6373BF),
+            color: isDark ? const Color(0xFF1F2235) : const Color(0xFF6373BF),
             padding: EdgeInsets.symmetric(
               horizontal: AppSpacing.lg(context),
               vertical: AppSpacing.xs(context),
             ),
             child: Container(
               decoration: BoxDecoration(
-                color: isDark ? const Color(0xFF1A1A2E) : Colors.white,
+                color: isDark ? const Color(0xFF2C2C2C) : Colors.white,
                 borderRadius: BorderRadius.circular(16),
                 border: isDark ? Border.all(color: Colors.white24, width: 1) : null,
                 boxShadow: isDark
@@ -218,15 +218,13 @@ class _HomeScreenState extends State<HomeScreen> {
                 style: theme.textTheme.bodyLarge,
                 decoration: InputDecoration(
                   hintText: 'Search countries...',
-                  hintStyle: theme.textTheme.bodyMedium?.copyWith(
-                    color: isDark ? Colors.white38 : Colors.grey,
-                  ),
+                  hintStyle: theme.textTheme.bodyMedium?.copyWith(color: const Color(0xFF888888)),
                   prefixIcon: Icon(
                     Icons.search,
-                    color: isDark ? Colors.amber : const Color(0xFF6373BF),
+                    color: isDark ? Colors.white54 : const Color(0xFF6373BF),
                   ),
                   filled: isDark,
-                  fillColor: const Color(0xFF1A1A2E),
+                  fillColor: const Color(0xFF2C2C2C),
                   border: isDark
                       ? OutlineInputBorder(
                           borderRadius: BorderRadius.circular(16),
