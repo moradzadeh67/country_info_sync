@@ -18,7 +18,7 @@ Country Info Sync is a Flutter-based application that allows users to:
 - 🌐 **Real-time Sync**: Fetches global country data from the `countries.dev` API
 - 💾 **Offline-First**: Automatic local storage using **Hive** for instant offline access
 - 🔍 **Smart Search**: Fast, case-insensitive search with relevance sorting (exact matches first)
-- 📱 **Modern UI**: Built with **Material 3** and **Poppins** typography
+- 📱 **Modern UI**: Built with **Material 3** and **Inter/Vazirmatn** typography
 - 🏳️ **Visual Identity**: Flag displays with Hero animations for smooth transitions
 - 📊 **Rich Details**: Native Name, Population, Capital, Subregion, Continent, Languages, Currencies, Area, Timezones, Calling Code, and Border Countries
 - 📏 **Adaptive Layout**: Responsive text scaling for long country names using `FittedBox`
