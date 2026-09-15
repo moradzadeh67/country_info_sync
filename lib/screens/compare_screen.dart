@@ -197,32 +197,16 @@ class CompareScreen extends StatelessWidget {
                           child: CircularProgressIndicator(strokeWidth: 2),
                         ),
                       ),
-                      errorWidget: (context, url, error) => Center(
-                        child: FittedBox(
-                          fit: BoxFit.contain,
-                          child: Padding(
-                            padding: const EdgeInsets.all(4.0),
-                            child: Text(country.emojiFlag, style: const TextStyle(fontSize: 64)),
-                          ),
-                        ),
-                      ),
+                      errorWidget: (context, url, error) => const Icon(Icons.flag, size: 40),
                     )
-                  : Center(
-                      child: FittedBox(
-                        fit: BoxFit.contain,
-                        child: Padding(
-                          padding: const EdgeInsets.all(4.0),
-                          child: Text(country.emojiFlag, style: const TextStyle(fontSize: 64)),
-                        ),
-                      ),
-                    ),
+                  : const Icon(Icons.flag, size: 40),
             ),
           ),
           SizedBox(height: AppSpacing.sm(context)),
           Text(
             country.name,
             style: theme.textTheme.titleMedium?.copyWith(
-              color: Colors.black,
+              color: isDark ? Colors.white : Colors.black,
               fontWeight: FontWeight.bold,
             ),
             textAlign: TextAlign.center,
@@ -264,12 +248,12 @@ class CompareScreen extends StatelessWidget {
           Row(
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
-              Icon(icon, size: 16, color: Colors.black),
+              Icon(icon, size: 16, color: isDark ? Colors.white : Colors.black),
               SizedBox(width: AppSpacing.tiny(context)),
               Text(
                 title,
                 style: theme.textTheme.labelMedium?.copyWith(
-                  color: Colors.black,
+                  color: isDark ? Colors.white : Colors.black,
                   fontWeight: FontWeight.bold,
                 ),
               ),
@@ -283,7 +267,7 @@ class CompareScreen extends StatelessWidget {
                   val1,
                   style: theme.textTheme.bodyMedium?.copyWith(
                     fontWeight: FontWeight.w600,
-                    color: const Color(0xFF344535),
+                    color: isDark ? Colors.white70 : const Color(0xFF344535),
                   ),
                   textAlign: TextAlign.center,
                 ),
@@ -298,7 +282,7 @@ class CompareScreen extends StatelessWidget {
                   val2,
                   style: theme.textTheme.bodyMedium?.copyWith(
                     fontWeight: FontWeight.w600,
-                    color: const Color(0xFF344535),
+                    color: isDark ? Colors.white70 : const Color(0xFF344535),
                   ),
                   textAlign: TextAlign.center,
                 ),

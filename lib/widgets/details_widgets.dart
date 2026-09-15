@@ -36,13 +36,13 @@ class HeritageCard extends StatelessWidget {
         children: [
           Row(
             children: [
-              Icon(Icons.account_balance, size: 18, color: Colors.black),
+              Icon(Icons.account_balance, size: 18, color: isDark ? Colors.white : Colors.black),
               SizedBox(width: AppSpacing.xxs(context)),
               Expanded(
                 child: Text(
                   site.name,
                   style: theme.textTheme.titleMedium?.copyWith(
-                    color: Colors.black,
+                    color: isDark ? Colors.white : Colors.black,
                     fontWeight: FontWeight.bold,
                   ),
                 ),
@@ -52,7 +52,9 @@ class HeritageCard extends StatelessWidget {
           SizedBox(height: AppSpacing.xxs(context)),
           Text(
             site.description,
-            style: theme.textTheme.bodyMedium?.copyWith(color: const Color(0xFF344535)),
+            style: theme.textTheme.bodyMedium?.copyWith(
+              color: isDark ? Colors.white70 : const Color(0xFF344535),
+            ),
           ),
         ],
       ),
@@ -103,12 +105,12 @@ class _InsightCardState extends State<InsightCard> {
         children: [
           Row(
             children: [
-              Icon(Icons.info_outline, size: 20, color: Colors.black),
+              Icon(Icons.info_outline, size: 20, color: isDark ? Colors.white : Colors.black),
               SizedBox(width: AppSpacing.xxs(context)),
               Text(
                 'About ${widget.countryName}',
                 style: widget.theme.textTheme.titleSmall?.copyWith(
-                  color: Colors.black,
+                  color: isDark ? Colors.white : Colors.black,
                   fontWeight: FontWeight.bold,
                 ),
               ),
@@ -123,7 +125,7 @@ class _InsightCardState extends State<InsightCard> {
                 Text(
                   widget.insight.extract,
                   style: widget.theme.textTheme.bodyMedium?.copyWith(
-                    color: const Color(0xFF344535),
+                    color: isDark ? Colors.white70 : const Color(0xFF344535),
                   ),
                   maxLines: _isInsightExpanded ? null : 4,
                   overflow: _isInsightExpanded ? TextOverflow.visible : TextOverflow.ellipsis,
@@ -132,7 +134,8 @@ class _InsightCardState extends State<InsightCard> {
                 Text(
                   _isInsightExpanded ? 'Show Less' : 'Read More...',
                   style: widget.theme.textTheme.labelMedium?.copyWith(
-                    color: const Color(0xFF344535),
+                    color: isDark ? Colors.lightGreenAccent : const Color(0xFF344535),
+                    fontWeight: FontWeight.w600,
                   ),
                 ),
               ],
@@ -211,7 +214,7 @@ class InfoTile extends StatelessWidget {
               color: theme.colorScheme.primary.withValues(alpha: 0.1),
               borderRadius: BorderRadius.circular(12),
             ),
-            child: Icon(icon, size: 20, color: Colors.black),
+            child: Icon(icon, size: 20, color: isDark ? Colors.white : Colors.black),
           ),
           SizedBox(width: AppSpacing.sm(context)),
           Expanded(
@@ -222,7 +225,7 @@ class InfoTile extends StatelessWidget {
                 Text(
                   label,
                   style: theme.textTheme.labelSmall?.copyWith(
-                    color: Colors.black,
+                    color: isDark ? Colors.white : Colors.black,
                     fontWeight: FontWeight.bold,
                   ),
                 ),
@@ -230,7 +233,7 @@ class InfoTile extends StatelessWidget {
                   value,
                   style: theme.textTheme.bodySmall?.copyWith(
                     fontWeight: FontWeight.w600,
-                    color: const Color(0xFF344535),
+                    color: isDark ? Colors.white70 : const Color(0xFF344535),
                   ),
                   overflow: TextOverflow.ellipsis,
                 ),

@@ -137,31 +137,10 @@ class _CountryCardState extends State<CountryCard> with SingleTickerProviderStat
                                       ),
                                     ),
                                   ),
-                                  errorWidget: (context, url, error) => Center(
-                                    child: FittedBox(
-                                      fit: BoxFit.contain,
-                                      child: Padding(
-                                        padding: const EdgeInsets.all(4.0),
-                                        child: Text(
-                                          widget.country.emojiFlag,
-                                          style: const TextStyle(fontSize: 100),
-                                        ),
-                                      ),
-                                    ),
-                                  ),
+                                  errorWidget: (context, url, error) =>
+                                      const Icon(Icons.flag, size: 30),
                                 )
-                              : Center(
-                                  child: FittedBox(
-                                    fit: BoxFit.contain,
-                                    child: Padding(
-                                      padding: const EdgeInsets.all(4.0),
-                                      child: Text(
-                                        widget.country.emojiFlag,
-                                        style: const TextStyle(fontSize: 100),
-                                      ),
-                                    ),
-                                  ),
-                                ),
+                              : const Icon(Icons.flag, size: 30),
                         ),
                       ),
                     ),
@@ -176,7 +155,7 @@ class _CountryCardState extends State<CountryCard> with SingleTickerProviderStat
                             child: Text(
                               widget.country.name,
                               style: theme.textTheme.titleMedium?.copyWith(
-                                color: Colors.black,
+                                color: isDark ? Colors.white : Colors.black,
                                 fontWeight: FontWeight.bold,
                               ),
                               maxLines: 1,
@@ -185,13 +164,17 @@ class _CountryCardState extends State<CountryCard> with SingleTickerProviderStat
                           SizedBox(height: AppSpacing.hair(context)),
                           Row(
                             children: [
-                              Icon(Icons.location_city, size: 14, color: Colors.black),
+                              Icon(
+                                Icons.location_city,
+                                size: 14,
+                                color: isDark ? Colors.white70 : Colors.black,
+                              ),
                               SizedBox(width: AppSpacing.hair(context)),
                               Expanded(
                                 child: Text(
                                   widget.country.capital ?? 'No Capital',
                                   style: theme.textTheme.bodySmall?.copyWith(
-                                    color: const Color(0xFF344535),
+                                    color: isDark ? Colors.white : const Color(0xFF344535),
                                     fontWeight: FontWeight.w600,
                                   ),
                                   maxLines: 1,

@@ -132,31 +132,9 @@ class _DetailsScreenState extends State<DetailsScreen> {
                             fit: BoxFit.cover,
                             placeholder: (context, url) =>
                                 const Center(child: CircularProgressIndicator()),
-                            errorWidget: (context, url, error) => Center(
-                              child: FittedBox(
-                                fit: BoxFit.contain,
-                                child: Padding(
-                                  padding: const EdgeInsets.all(16.0),
-                                  child: Text(
-                                    widget.country.emojiFlag,
-                                    style: const TextStyle(fontSize: 200),
-                                  ),
-                                ),
-                              ),
-                            ),
+                            errorWidget: (context, url, error) => const Icon(Icons.flag, size: 100),
                           )
-                        : Center(
-                            child: FittedBox(
-                              fit: BoxFit.contain,
-                              child: Padding(
-                                padding: const EdgeInsets.all(16.0),
-                                child: Text(
-                                  widget.country.emojiFlag,
-                                  style: const TextStyle(fontSize: 200),
-                                ),
-                              ),
-                            ),
-                          ),
+                        : const Icon(Icons.flag, size: 100),
                   ),
                 ),
               ),
@@ -336,7 +314,7 @@ class _DetailsScreenState extends State<DetailsScreen> {
           Text(
             title,
             style: theme.textTheme.labelMedium?.copyWith(
-              color: Colors.black,
+              color: isDark ? Colors.white : Colors.black,
               fontWeight: FontWeight.bold,
             ),
           ),
@@ -344,7 +322,7 @@ class _DetailsScreenState extends State<DetailsScreen> {
           Text(
             content.isEmpty ? '—' : content,
             style: theme.textTheme.bodyMedium?.copyWith(
-              color: const Color(0xFF344535),
+              color: isDark ? Colors.white70 : const Color(0xFF344535),
               fontWeight: FontWeight.w500,
             ),
           ),
