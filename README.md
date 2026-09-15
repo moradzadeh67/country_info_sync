@@ -152,12 +152,12 @@ assets/
 
 | Platform | Status | Notes |
 |---|:---:|---|
-| <img src="assets/icons/android-icon.png" width="30" height="30" style="display:block;margin:auto;" alt="Android"> | ✅ Tested | Working perfectly on all devices |
-| <img src="assets/icons/ios-icon.png" width="30" height="30" style="display:block;margin:auto;" alt="iOS"> | ✅ Tested | Working on iPhone & iPad |
-| <img src="assets/icons/web-icon.png" width="30" height="30" style="display:block;margin:auto;" alt="Web"> | ✅ Tested | Chrome, Firefox, Safari compatible |
-| <img src="assets/icons/macos-icon.png" width="30" height="30" style="display:block;margin:auto;" alt="macOS"> | ✅ Tested | Working on Apple Silicon |
-| <img src="assets/icons/windows-icon.png" width="30" height="30" style="display:block;margin:auto;" alt="Windows"> | ❌ Not tested | Build available |
-| <img src="assets/icons/linux-icon.png" width="30" height="30" style="display:block;margin:auto;" alt="Linux"> | ❌ Not tested | Build available |
+| <img src="assets/icons/android-icon.svg" width="30" height="30" style="display:block;margin:auto;" alt="Android"> | ✅ Tested | Working perfectly on all devices |
+| <img src="assets/icons/ios-icon.svg" width="30" height="30" style="display:block;margin:auto;" alt="iOS"> | ✅ Tested | Working on iPhone & iPad |
+| <img src="assets/icons/web-icon.svg" width="30" height="30" style="display:block;margin:auto;" alt="Web"> | ✅ Tested | Chrome, Firefox, Safari compatible |
+| <img src="assets/icons/macos-icon.svg" width="30" height="30" style="display:block;margin:auto;" alt="macOS"> | ✅ Tested | Working on Apple Silicon |
+| <img src="assets/icons/windows-icon.svg" width="30" height="30" style="display:block;margin:auto;" alt="Windows"> | ❌ Not tested | Build available |
+| <img src="assets/icons/linux-icon.svg" width="30" height="30" style="display:block;margin:auto;" alt="Linux"> | ❌ Not tested | Build available |
 
 > Android, iOS, Web, and macOS tested. Windows & Linux builds available but untested.
 
