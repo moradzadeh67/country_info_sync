@@ -28,7 +28,7 @@ Country Info Sync is a Flutter-based application that allows users to:
 - **Flutter & Dart** (3.13.2+)
 - **Networking**: [`http`](https://pub.dev/packages/http) (REST API calls to `countries.dev`)
 - **Local Persistence**: [`hive`](https://pub.dev/packages/hive) & [`hive_flutter`](https://pub.dev/packages/hive_flutter)
-- **Typography**: [`google_fonts`](https://pub.dev/packages/google_fonts) (Poppins)
+- **Typography**: [`google_fonts`](https://pub.dev/packages/google_fonts) (Inter for Latin, Vazirmatn for Persian)
 - **Localization**: `flutter_localizations`
 - **Architecture**: No external state management — local UI state handled directly with `StatefulWidget` + `setState`
 

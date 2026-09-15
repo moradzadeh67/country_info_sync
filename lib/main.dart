@@ -15,8 +15,9 @@ Future<void> main() async {
   await Hive.openBox<List>('favorites_box');
   await Hive.openBox('insight_cache');
 
-  // Load saved theme preference
-  final savedTheme = 'light'; // settingsBox.get('theme_mode', defaultValue: 'light');
+  // Load saved theme preference (persisted in Task 3.5)
+  final settingsBox = await Hive.openBox('settings_box');
+  final savedTheme = settingsBox.get('theme_mode', defaultValue: 'light') as String;
   themeNotifier.value = savedTheme == 'dark' ? ThemeMode.dark : ThemeMode.light;
 
   runApp(const MyApp());
