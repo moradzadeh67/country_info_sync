@@ -152,12 +152,12 @@ assets/
 
 | Platform | Status | Notes |
 |---|:---:|---|
-| Android | ✅ Tested | Working perfectly on all devices |
-| iOS | ✅ Tested | Working on iPhone & iPad |
-| Web | ✅ Tested | Chrome, Firefox, Safari compatible |
-| macOS | ✅ Tested | Working on Apple Silicon |
-| Windows | ❌ Not tested | Build available |
-| Linux | ❌ Not tested | Build available |
+| ![Android Icon](assets/icons/android-icon.png) | ✅ Tested | Working perfectly on all devices |
+| ![iOS Icon](assets/icons/ios-icon.png) | ✅ Tested | Working on iPhone & iPad |
+| ![Web Icon](assets/icons/web-icon.png) | ✅ Tested | Chrome, Firefox, Safari compatible |
+| ![macOS Icon](assets/icons/macos-icon.png) | ✅ Tested | Working on Apple Silicon |
+| ![Windows Icon](assets/icons/windows-icon.png) | ❌ Not tested | Build available |
+| ![Linux Icon](assets/icons/linux-icon.png) | ❌ Not tested | Build available |
 
 > Android, iOS, Web, and macOS tested. Windows & Linux builds available but untested.
 
