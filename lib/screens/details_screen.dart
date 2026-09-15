@@ -83,7 +83,7 @@ class _DetailsScreenState extends State<DetailsScreen> {
           style: theme.textTheme.titleMedium?.copyWith(color: Colors.white),
         ),
         elevation: 0,
-        backgroundColor: const Color(0xFF6373BF),
+        backgroundColor: isDark ? const Color(0xFF1A1A2E) : const Color(0xFF6373BF),
         foregroundColor: Colors.white,
         actions: [
           IconButton(

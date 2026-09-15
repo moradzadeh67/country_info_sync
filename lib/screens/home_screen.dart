@@ -169,7 +169,7 @@ class _HomeScreenState extends State<HomeScreen> {
           style: theme.textTheme.headlineSmall?.copyWith(color: Colors.white),
         ),
         elevation: 0,
-        backgroundColor: const Color(0xFF6373BF),
+        backgroundColor: isDark ? const Color(0xFF1A1A2E) : const Color(0xFF6373BF),
         foregroundColor: Colors.white,
         actions: [
           IconButton(
@@ -192,14 +192,14 @@ class _HomeScreenState extends State<HomeScreen> {
         bottom: PreferredSize(
           preferredSize: const Size.fromHeight(80),
           child: Container(
-            color: const Color(0xFF6373BF),
+            color: isDark ? const Color(0xFF1A1A2E) : const Color(0xFF6373BF),
             padding: EdgeInsets.symmetric(
               horizontal: AppSpacing.lg(context),
               vertical: AppSpacing.xs(context),
             ),
             child: Container(
               decoration: BoxDecoration(
-                color: isDark ? theme.colorScheme.surfaceContainerHighest : Colors.white,
+                color: isDark ? const Color(0xFF1A1A2E) : Colors.white,
                 borderRadius: BorderRadius.circular(16),
                 boxShadow: isDark
                     ? []
@@ -220,7 +220,10 @@ class _HomeScreenState extends State<HomeScreen> {
                   hintStyle: theme.textTheme.bodyMedium?.copyWith(
                     color: isDark ? Colors.white38 : Colors.grey,
                   ),
-                  prefixIcon: Icon(Icons.search, color: const Color(0xFF6373BF)),
+                  prefixIcon: Icon(
+                    Icons.search,
+                    color: isDark ? Colors.amber : const Color(0xFF6373BF),
+                  ),
                   border: InputBorder.none,
                   contentPadding: EdgeInsets.symmetric(vertical: AppSpacing.md(context)),
                 ),
