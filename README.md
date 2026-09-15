@@ -154,7 +154,7 @@ assets/
 |---|:---:|---|
 | <img src="assets/icons/android-icon.png" width="50" height="50" style="display:block;margin:auto;" alt="Android"> | ✅ Tested | Working perfectly on all devices |
 | <img src="assets/icons/ios-icon.png" width="50" height="50" style="display:block;margin:auto;" alt="iOS"> | ✅ Tested | Working on iPhone & iPad |
-| <img src="assets/icons/web-icon.svg" width="50" height="50" style="display:block;margin:auto;" alt="Web"> | ✅ Tested | Chrome, Firefox, Safari compatible |
+| <img src="assets/icons/web-icon.png" width="50" height="50" style="display:block;margin:auto;" alt="Web"> | ✅ Tested | Chrome, Firefox, Safari compatible |
 | <img src="assets/icons/macos-icon.png" width="50" height="50" style="display:block;margin:auto;" alt="macOS"> | ✅ Tested | Working on Apple Silicon |
 | <img src="assets/icons/windows-icon.png" width="50" height="50" style="display:block;margin:auto;" alt="Windows"> | ❌ Not tested | Build available |
 | <img src="assets/icons/linux-icon.png" width="50" height="50" style="display:block;margin:auto;" alt="Linux"> | ❌ Not tested | Build available |
