@@ -221,13 +221,18 @@ class _HomeScreenState extends State<HomeScreen> {
                   hintStyle: theme.textTheme.bodyMedium?.copyWith(
                     color: isDark ? Colors.white38 : Colors.grey,
                   ),
-                  prefixIcon: Icon(Icons.search, color: Colors.amber),
+                  prefixIcon: Icon(
+                    Icons.search,
+                    color: isDark ? Colors.amber : const Color(0xFF6373BF),
+                  ),
                   filled: isDark,
                   fillColor: const Color(0xFF1A1A2E),
-                  border: OutlineInputBorder(
-                    borderRadius: BorderRadius.circular(16),
-                    borderSide: const BorderSide(color: Colors.white24),
-                  ),
+                  border: isDark
+                      ? OutlineInputBorder(
+                          borderRadius: BorderRadius.circular(16),
+                          borderSide: const BorderSide(color: Colors.white24),
+                        )
+                      : InputBorder.none,
                   contentPadding: EdgeInsets.symmetric(vertical: AppSpacing.md(context)),
                 ),
               ),
