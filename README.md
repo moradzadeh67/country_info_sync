@@ -30,7 +30,7 @@ Country Info Sync is a Flutter-based application that allows users to:
 - **Local Persistence**: [`hive`](https://pub.dev/packages/hive) & [`hive_flutter`](https://pub.dev/packages/hive_flutter)
 - **Typography**: [`google_fonts`](https://pub.dev/packages/google_fonts) (Poppins)
 - **Localization**: `flutter_localizations`
-- **Architecture**: Minimalist structure following the simplest correct solution principles
+- **Architecture**: No external state management — local UI state handled directly with `StatefulWidget` + `setState`
 
 ## 🚀 How to Run
 
@@ -92,7 +92,8 @@ lib/
 │   └── details_screen.dart       # Multi-section country details view
 └── widgets/                      # Shared widgets (reserved)
 assets/
-└── images/                       # App logo (SVG + PNG variants)
+├── images/                       # App logo (SVG + PNG variants)
+└── icons/                        # Platform icons used in this README
 ```
 
 ## 📱 Supported Platforms
@@ -102,7 +103,7 @@ assets/
 | 🤖 Android | ![Android Icon](assets/icons/android-icon.png) | ✅ **Tested** | Working perfectly on all devices |
 | 🍎 iOS | ![iOS Icon](assets/icons/ios-icon.png) | ✅ **Tested** | Working on iPhone & iPad |
 | 🌐 Web | ![Web Icon](assets/icons/web-icon.png) | ✅ **Tested** | Chrome, Firefox, Safari compatible |
-| 🖥️ macOS | ![macOS Icon](assets/icons/macos-icon.png) | ✅ **Tested** | Working on Intel & Apple Silicon |
+| 🖥️ macOS | ![macOS Icon](assets/icons/macos-icon.png) | ✅ **Tested** | Working on Apple Silicon (M-series) |
 | 🪟 Windows | ![Windows Icon](assets/icons/windows-icon.png) | ❌ **Not tested** | Build available, awaiting testing |
 | 🐧 Linux | ![Linux Icon](assets/icons/linux-icon.png) | ❌ **Not tested** | Build available, awaiting testing |
 

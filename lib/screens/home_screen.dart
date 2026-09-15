@@ -1,9 +1,17 @@
 import 'package:flutter/material.dart';
-import 'package:google_fonts/google_fonts.dart';
+import 'package:flutter/services.dart';
+import 'package:hive/hive.dart';
 
 import '../models/country.dart';
 import '../services/country_service.dart';
+import '../services/favorites_service.dart';
+import '../main.dart';
+import '../theme/app_spacing.dart';
+import '../widgets/country_card.dart';
+import '../widgets/shimmer_loading.dart';
+import '../widgets/empty_state_view.dart';
 import 'details_screen.dart';
+import 'compare_screen.dart';
 
 class HomeScreen extends StatefulWidget {
   const HomeScreen({super.key});
@@ -14,16 +22,20 @@ class HomeScreen extends StatefulWidget {
 
 class _HomeScreenState extends State<HomeScreen> {
   final CountryService _service = CountryService();
+  final FavoritesService _favService = FavoritesService();
   final TextEditingController _controller = TextEditingController();
   List<Country> _allCountries = [];
   List<Country> _filteredCountries = [];
+  List<String> _favorites = [];
+  bool _showFavoritesOnly = false;
+  List<String> selectedForCompare = [];
   bool _isLoading = true;
   String _error = '';
 
   @override
   void initState() {
     super.initState();
-    _loadCountries();
+    _loadData();
   }
 
   @override
@@ -32,16 +44,18 @@ class _HomeScreenState extends State<HomeScreen> {
     super.dispose();
   }
 
-  Future<void> _loadCountries() async {
+  Future<void> _loadData() async {
     setState(() {
       _isLoading = true;
       _error = '';
     });
     try {
       final countries = await _service.getCountries();
+      final favorites = await _favService.getFavorites();
       setState(() {
         _allCountries = countries;
         _filteredCountries = countries;
+        _favorites = favorites;
         _isLoading = false;
       });
     } catch (e) {
@@ -52,19 +66,65 @@ class _HomeScreenState extends State<HomeScreen> {
     }
   }
 
-  void _filter(String query) {
-    final lowerQuery = query.toLowerCase().trim();
+  Future<void> _toggleFavorite(String name) async {
+    if (_favorites.contains(name)) {
+      await _favService.removeFavorite(name);
+    } else {
+      await _favService.addFavorite(name);
+    }
+    final updatedFavs = await _favService.getFavorites();
+    if (!mounted) return;
+    _favorites = updatedFavs;
+    _applyFilters();
+  }
+
+  void _toggleFavoritesFilter() {
+    HapticFeedback.lightImpact();
+    _showFavoritesOnly = !_showFavoritesOnly;
+    _applyFilters();
+  }
+
+  void _toggleTheme() {
+    HapticFeedback.mediumImpact();
+    final newMode = themeNotifier.value == ThemeMode.light ? ThemeMode.dark : ThemeMode.light;
+    themeNotifier.value = newMode;
+    Hive.box('settings_box').put('theme_mode', newMode == ThemeMode.dark ? 'dark' : 'light');
+  }
+
+  void _toggleSelectForCompare(String name) {
+    if (selectedForCompare.contains(name)) {
+      selectedForCompare.remove(name);
+    } else if (selectedForCompare.length < 2) {
+      selectedForCompare.add(name);
+    } else {
+      if (!mounted) return;
+      HapticFeedback.vibrate();
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(
+          content: Text('Only 2 countries can be compared'),
+          duration: Duration(seconds: 2),
+        ),
+      );
+      return;
+    }
+    if (mounted) setState(() {});
+  }
+
+  void _applyFilters() {
+    final lowerQuery = _controller.text.toLowerCase().trim();
     setState(() {
-      if (lowerQuery.isEmpty) {
-        _filteredCountries = List.from(_allCountries);
-      } else {
-        _filteredCountries = _allCountries.where((c) {
+      var result = _allCountries
+          .where((c) => !_showFavoritesOnly || _favorites.contains(c.name))
+          .toList();
+
+      if (lowerQuery.isNotEmpty) {
+        result = result.where((c) {
           final name = c.name.toLowerCase();
           final capital = c.capital?.toLowerCase() ?? '';
           return name.contains(lowerQuery) || capital.contains(lowerQuery);
         }).toList();
 
-        _filteredCountries.sort((a, b) {
+        result.sort((a, b) {
           final aName = a.name.toLowerCase();
           final bName = b.name.toLowerCase();
           final aStarts = aName.startsWith(lowerQuery);
@@ -74,172 +134,167 @@ class _HomeScreenState extends State<HomeScreen> {
           return aName.compareTo(bName);
         });
       }
+
+      _filteredCountries = result;
     });
   }
 
+  List<Country> _selectedCountries() {
+    return _allCountries.where((c) => selectedForCompare.contains(c.name)).toList();
+  }
+
+  Future<void> _navigateToCompare() async {
+    HapticFeedback.mediumImpact();
+    await Navigator.push(
+      context,
+      MaterialPageRoute(builder: (context) => CompareScreen(countries: _selectedCountries())),
+    );
+    if (mounted) {
+      setState(() {
+        selectedForCompare.clear();
+      });
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
+    final theme = Theme.of(context);
+    final isDark = theme.brightness == Brightness.dark;
+
     return Scaffold(
-      backgroundColor: const Color(0xFFF8F9FE),
+      backgroundColor: isDark ? theme.colorScheme.surface : const Color(0xFFDAE0EA),
       appBar: AppBar(
         title: Text(
           'Explorer',
-          style: GoogleFonts.poppins(fontWeight: FontWeight.w700, fontSize: 24),
+          style: theme.textTheme.headlineSmall?.copyWith(color: Colors.white),
         ),
         elevation: 0,
-        backgroundColor: Colors.transparent,
-        foregroundColor: Colors.black,
+        backgroundColor: const Color(0xFF6373BF),
+        foregroundColor: Colors.white,
+        actions: [
+          IconButton(
+            tooltip: isDark ? 'Switch to Light Mode' : 'Switch to Dark Mode',
+            icon: Icon(
+              isDark ? Icons.light_mode : Icons.dark_mode,
+              color: isDark ? Colors.amber : Colors.white,
+            ),
+            onPressed: _toggleTheme,
+          ),
+          IconButton(
+            tooltip: 'Favorites only',
+            icon: Icon(
+              _showFavoritesOnly ? Icons.favorite : Icons.favorite_border,
+              color: _showFavoritesOnly ? Colors.red : Colors.white,
+            ),
+            onPressed: _toggleFavoritesFilter,
+          ),
+        ],
         bottom: PreferredSize(
           preferredSize: const Size.fromHeight(80),
-          child: Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 20.0, vertical: 10),
+          child: Container(
+            color: const Color(0xFF6373BF),
+            padding: EdgeInsets.symmetric(
+              horizontal: AppSpacing.lg(context),
+              vertical: AppSpacing.xs(context),
+            ),
             child: Container(
               decoration: BoxDecoration(
-                color: Colors.white,
+                color: isDark ? theme.colorScheme.surfaceContainerHighest : Colors.white,
                 borderRadius: BorderRadius.circular(16),
-                boxShadow: [
-                  BoxShadow(
-                    color: Colors.black.withValues(alpha: 0.05),
-                    blurRadius: 10,
-                    offset: const Offset(0, 4),
-                  ),
-                ],
+                boxShadow: isDark
+                    ? []
+                    : [
+                        BoxShadow(
+                          color: Colors.black.withValues(alpha: 0.05),
+                          blurRadius: 10,
+                          offset: const Offset(0, 4),
+                        ),
+                      ],
               ),
               child: TextField(
                 controller: _controller,
-                onChanged: _filter,
-                style: GoogleFonts.poppins(fontSize: 16),
+                onChanged: (_) => _applyFilters(),
+                style: theme.textTheme.bodyLarge,
                 decoration: InputDecoration(
                   hintText: 'Search countries...',
-                  hintStyle: GoogleFonts.poppins(color: Colors.grey, fontSize: 14),
-                  prefixIcon: const Icon(Icons.search, color: Colors.indigo),
+                  hintStyle: theme.textTheme.bodyMedium?.copyWith(
+                    color: isDark ? Colors.white38 : Colors.grey,
+                  ),
+                  prefixIcon: Icon(Icons.search, color: const Color(0xFF6373BF)),
                   border: InputBorder.none,
-                  contentPadding: const EdgeInsets.symmetric(vertical: 15),
+                  contentPadding: EdgeInsets.symmetric(vertical: AppSpacing.md(context)),
                 ),
               ),
             ),
           ),
         ),
       ),
+      floatingActionButton: selectedForCompare.length == 2
+          ? FloatingActionButton.extended(
+              onPressed: _navigateToCompare,
+              label: Text('Compare (${selectedForCompare.length})'),
+              icon: const Icon(Icons.swap_horiz),
+            )
+          : null,
       body: _isLoading
-          ? const Center(child: CircularProgressIndicator())
+          ? const ShimmerLoading()
           : _error.isNotEmpty
-          ? Center(child: Text(_error, style: GoogleFonts.poppins()))
+          ? EmptyStateView(
+              icon: Icons.error_outline,
+              title: 'Error',
+              message: _error,
+              onRetry: _loadData,
+            )
           : RefreshIndicator(
-              onRefresh: _loadCountries,
-              child: ListView.builder(
-                padding: const EdgeInsets.all(20),
-                itemCount: _filteredCountries.length,
-                itemBuilder: (context, index) {
-                  final country = _filteredCountries[index];
-                  return CountryCard(country: country);
-                },
-              ),
-            ),
-    );
-  }
-}
-
-class CountryCard extends StatelessWidget {
-  final Country country;
-  const CountryCard({super.key, required this.country});
-
-  @override
-  Widget build(BuildContext context) {
-    return Container(
-      margin: const EdgeInsets.only(bottom: 16),
-      decoration: BoxDecoration(
-        color: Colors.white,
-        borderRadius: BorderRadius.circular(20),
-        boxShadow: [
-          BoxShadow(
-            color: Colors.black.withValues(alpha: 0.03),
-            blurRadius: 8,
-            offset: const Offset(0, 4),
-          ),
-        ],
-      ),
-      child: Material(
-        color: Colors.transparent,
-        child: InkWell(
-          borderRadius: BorderRadius.circular(20),
-          onTap: () => Navigator.push(
-            context,
-            MaterialPageRoute(builder: (context) => DetailsScreen(country: country)),
-          ),
-          child: Padding(
-            padding: const EdgeInsets.all(16),
-            child: Row(
-              children: [
-                Hero(
-                  tag: 'flag-${country.name}',
-                  child: Container(
-                    width: 70,
-                    height: 50,
-                    decoration: BoxDecoration(
-                      borderRadius: BorderRadius.circular(12),
-                      boxShadow: [
-                        BoxShadow(
-                          color: Colors.black.withValues(alpha: 0.1),
-                          blurRadius: 4,
-                          offset: const Offset(0, 2),
+              onRefresh: _loadData,
+              child: _filteredCountries.isEmpty
+                  ? ListView(
+                      children: [
+                        SizedBox(height: AppSpacing.emptyStateGap(context)),
+                        EmptyStateView(
+                          icon: _showFavoritesOnly && _controller.text.trim().isEmpty
+                              ? Icons.favorite_border
+                              : Icons.search_off,
+                          title: _showFavoritesOnly && _controller.text.trim().isEmpty
+                              ? 'No favorites yet'
+                              : 'No countries found',
+                          message: _showFavoritesOnly && _controller.text.trim().isEmpty
+                              ? 'Explore countries and mark them as favorites'
+                              : 'Try adjusting your search query',
                         ),
                       ],
+                    )
+                  : ListView.builder(
+                      padding: EdgeInsets.all(AppSpacing.lg(context)),
+                      itemCount: _filteredCountries.length,
+                      itemBuilder: (context, index) {
+                        final country = _filteredCountries[index];
+                        return CountryCard(
+                          country: country,
+                          isFavorite: _favorites.contains(country.name),
+                          isSelected: selectedForCompare.contains(country.name),
+                          onToggleFavorite: () => _toggleFavorite(country.name),
+                          onLongPress: () => _toggleSelectForCompare(country.name),
+                          onTap: () async {
+                            HapticFeedback.selectionClick();
+                            await Navigator.push(
+                              context,
+                              MaterialPageRoute(
+                                builder: (context) => DetailsScreen(country: country),
+                              ),
+                            );
+                            // Refresh favorites when returning from details screen
+                            final updatedFavs = await _favService.getFavorites();
+                            if (mounted) {
+                              setState(() {
+                                _favorites = updatedFavs;
+                              });
+                            }
+                          },
+                        );
+                      },
                     ),
-                    child: ClipRRect(
-                      borderRadius: BorderRadius.circular(12),
-                      child: country.flag.isNotEmpty
-                          ? Image.network(
-                              country.flag,
-                              fit: BoxFit.cover,
-                              errorBuilder: (_, __, ___) => const Icon(Icons.flag, size: 30),
-                            )
-                          : const Icon(Icons.flag, size: 30),
-                    ),
-                  ),
-                ),
-                const SizedBox(width: 16),
-                Expanded(
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      FittedBox(
-                        fit: BoxFit.scaleDown,
-                        alignment: Alignment.centerLeft,
-                        child: Text(
-                          country.name,
-                          style: GoogleFonts.poppins(
-                            fontWeight: FontWeight.w600,
-                            fontSize: 17,
-                            color: const Color(0xFF1E2432),
-                          ),
-                          maxLines: 1,
-                        ),
-                      ),
-                      const SizedBox(height: 4),
-                      Row(
-                        children: [
-                          const Icon(Icons.location_city, size: 14, color: Colors.grey),
-                          const SizedBox(width: 4),
-                          Expanded(
-                            child: Text(
-                              country.capital ?? 'No Capital',
-                              style: GoogleFonts.poppins(fontSize: 13, color: Colors.grey[600]),
-                              maxLines: 1,
-                              overflow: TextOverflow.ellipsis,
-                            ),
-                          ),
-                        ],
-                      ),
-                    ],
-                  ),
-                ),
-                const Icon(Icons.arrow_forward_ios, size: 16, color: Colors.indigo),
-              ],
             ),
-          ),
-        ),
-      ),
     );
   }
 }

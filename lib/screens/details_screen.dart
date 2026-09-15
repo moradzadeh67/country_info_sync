@@ -1,124 +1,273 @@
 import 'package:flutter/material.dart';
-import 'package:google_fonts/google_fonts.dart';
+import 'package:flutter/services.dart';
+import 'package:cached_network_image/cached_network_image.dart';
 
 import '../models/country.dart';
+import '../models/heritage_site.dart';
+import '../models/country_insight.dart';
+import '../services/favorites_service.dart';
+import '../services/heritage_service.dart';
+import '../services/wikipedia_service.dart';
+import '../theme/app_spacing.dart';
+import '../widgets/details_widgets.dart';
 
-class DetailsScreen extends StatelessWidget {
+class DetailsScreen extends StatefulWidget {
   final Country country;
   const DetailsScreen({super.key, required this.country});
 
   @override
+  State<DetailsScreen> createState() => _DetailsScreenState();
+}
+
+class _DetailsScreenState extends State<DetailsScreen> {
+  final FavoritesService _favService = FavoritesService();
+  bool _isFavorite = false;
+  List<HeritageSite> _heritageSites = [];
+  CountryInsight? _countryInsight;
+
+  @override
+  void initState() {
+    super.initState();
+    _checkFavoriteStatus();
+    _loadHeritageSites();
+    _loadCountryInsight();
+  }
+
+  Future<void> _loadCountryInsight() async {
+    final insight = await WikipediaService.getInsight(widget.country.name);
+    if (mounted) {
+      setState(() {
+        _countryInsight = insight;
+      });
+    }
+  }
+
+  Future<void> _loadHeritageSites() async {
+    final sites = await HeritageService.getSitesForCountry(widget.country.name);
+    if (mounted) {
+      setState(() {
+        _heritageSites = sites;
+      });
+    }
+  }
+
+  Future<void> _checkFavoriteStatus() async {
+    final isFav = await _favService.isFavorite(widget.country.name);
+    if (mounted) {
+      setState(() {
+        _isFavorite = isFav;
+      });
+    }
+  }
+
+  Future<void> _toggleFavorite() async {
+    HapticFeedback.selectionClick();
+    if (_isFavorite) {
+      await _favService.removeFavorite(widget.country.name);
+    } else {
+      await _favService.addFavorite(widget.country.name);
+    }
+    _checkFavoriteStatus();
+  }
+
+  @override
   Widget build(BuildContext context) {
+    final theme = Theme.of(context);
+    final isDark = theme.brightness == Brightness.dark;
+
     return Scaffold(
-      backgroundColor: const Color(0xFFF8F9FE),
+      backgroundColor: isDark ? theme.colorScheme.surface : const Color(0xFFDAE0EA),
       appBar: AppBar(
-        title: Text('Country Details', style: GoogleFonts.poppins(fontWeight: FontWeight.w600)),
+        title: Text(
+          'Country Details',
+          style: theme.textTheme.titleMedium?.copyWith(color: Colors.white),
+        ),
         elevation: 0,
-        backgroundColor: Colors.transparent,
-        foregroundColor: Colors.black,
+        backgroundColor: const Color(0xFF6373BF),
+        foregroundColor: Colors.white,
+        actions: [
+          IconButton(
+            icon: Icon(
+              _isFavorite ? Icons.favorite : Icons.favorite_border,
+              color: _isFavorite ? Colors.red : Colors.white,
+            ),
+            onPressed: _toggleFavorite,
+          ),
+        ],
       ),
       body: SingleChildScrollView(
-        padding: const EdgeInsets.all(20),
+        padding: EdgeInsets.all(AppSpacing.lg(context)),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             // Section 1: Flag and Identity
             Center(
               child: Hero(
-                tag: 'flag-${country.name}',
+                tag: 'flag-${widget.country.name}',
                 child: Container(
-                  height: 180,
+                  height: AppSpacing.heroFlagHeight(context),
                   width: double.infinity,
                   decoration: BoxDecoration(
+                    color: isDark ? Colors.white10 : const Color(0xFFE9F0FA),
                     borderRadius: BorderRadius.circular(28),
-                    boxShadow: [
-                      BoxShadow(
-                        color: Colors.black.withValues(alpha: 0.1),
-                        blurRadius: 20,
-                        offset: const Offset(0, 10),
-                      ),
-                    ],
+                    border: Border.all(
+                      color: isDark ? Colors.white24 : const Color(0xFFC5D2E8),
+                      width: 1,
+                    ),
+                    boxShadow: isDark
+                        ? []
+                        : [
+                            BoxShadow(
+                              color: Colors.black.withValues(alpha: 0.1),
+                              blurRadius: 20,
+                              offset: const Offset(0, 10),
+                            ),
+                          ],
                   ),
                   child: ClipRRect(
                     borderRadius: BorderRadius.circular(28),
-                    child: country.flag.isNotEmpty
-                        ? Image.network(country.flag, fit: BoxFit.cover)
-                        : const Icon(Icons.flag, size: 100),
+                    child: widget.country.flag.isNotEmpty
+                        ? CachedNetworkImage(
+                            imageUrl: widget.country.flag,
+                            fit: BoxFit.cover,
+                            placeholder: (context, url) =>
+                                const Center(child: CircularProgressIndicator()),
+                            errorWidget: (context, url, error) => Center(
+                              child: FittedBox(
+                                fit: BoxFit.contain,
+                                child: Padding(
+                                  padding: const EdgeInsets.all(16.0),
+                                  child: Text(
+                                    widget.country.emojiFlag,
+                                    style: const TextStyle(fontSize: 200),
+                                  ),
+                                ),
+                              ),
+                            ),
+                          )
+                        : Center(
+                            child: FittedBox(
+                              fit: BoxFit.contain,
+                              child: Padding(
+                                padding: const EdgeInsets.all(16.0),
+                                child: Text(
+                                  widget.country.emojiFlag,
+                                  style: const TextStyle(fontSize: 200),
+                                ),
+                              ),
+                            ),
+                          ),
                   ),
                 ),
               ),
             ),
-            const SizedBox(height: 24),
+            SizedBox(height: AppSpacing.xl(context)),
             FittedBox(
               fit: BoxFit.scaleDown,
               alignment: Alignment.centerLeft,
               child: Text(
-                country.name,
-                style: GoogleFonts.poppins(
-                  fontSize: 32,
-                  fontWeight: FontWeight.w700,
-                  color: const Color(0xFF1E2432),
-                ),
+                widget.country.name,
+                style: theme.textTheme.headlineMedium?.copyWith(color: theme.colorScheme.onSurface),
                 maxLines: 1,
               ),
             ),
-            if (country.nativeName.isNotEmpty)
+            if (widget.country.nativeName.isNotEmpty)
               Text(
-                country.nativeName,
-                style: GoogleFonts.poppins(
-                  fontSize: 18,
+                widget.country.nativeName,
+                style: theme.textTheme.titleMedium?.copyWith(
                   fontWeight: FontWeight.w500,
-                  color: Colors.grey[600],
+                  color: isDark ? Colors.white60 : Colors.grey[600],
                 ),
               ),
-            const SizedBox(height: 24),
+            SizedBox(height: AppSpacing.xl(context)),
 
             // Section 2: Core Info
-            _buildSectionHeader('General Information'),
-            _buildInfoGrid([
-              _InfoItem(Icons.location_city, 'Capital', country.capital ?? 'N/A'),
-              _InfoItem(Icons.people, 'Population', _formatNumber(country.population)),
-              _InfoItem(Icons.public, 'Subregion', country.subregion),
+            _buildSectionHeader(context, 'General Information', theme),
+            if (_countryInsight != null) ...[
+              InsightCard(
+                insight: _countryInsight!,
+                theme: theme,
+                countryName: widget.country.name,
+              ),
+              SizedBox(height: AppSpacing.md(context)),
+            ],
+            _buildInfoGrid(context, [
+              _InfoItem(Icons.location_city, 'Capital', widget.country.capital ?? '—'),
+              _InfoItem(Icons.people, 'Population', _formatNumber(widget.country.population)),
+              _InfoItem(
+                Icons.public,
+                'Subregion',
+                widget.country.subregion.isNotEmpty ? widget.country.subregion : '—',
+              ),
               _InfoItem(
                 Icons.square_foot,
                 'Area',
-                '${_formatNumber(country.area?.toInt() ?? 0)} km²',
+                widget.country.area != null
+                    ? '${_formatNumber(widget.country.area!.toInt())} km²'
+                    : '—',
               ),
-            ]),
+            ], theme),
 
-            const SizedBox(height: 24),
+            SizedBox(height: AppSpacing.xl(context)),
 
             // Section 3: Identity & Communication
-            _buildSectionHeader('Communication'),
-            _buildInfoGrid([
-              _InfoItem(Icons.call, 'Calling Code', '+${country.callingCode}'),
+            _buildSectionHeader(context, 'Communication', theme),
+            _buildInfoGrid(context, [
+              _InfoItem(
+                Icons.call,
+                'Calling Code',
+                widget.country.callingCode.isNotEmpty ? '+${widget.country.callingCode}' : '—',
+              ),
               _InfoItem(
                 Icons.language,
                 'Languages',
-                country.languages.isNotEmpty ? country.languages.first : 'N/A',
+                widget.country.languages.isNotEmpty ? widget.country.languages.first : '—',
               ),
               _InfoItem(
                 Icons.access_time,
                 'Timezones',
-                country.timezones.isNotEmpty ? country.timezones.first : 'N/A',
+                widget.country.timezones.isNotEmpty ? widget.country.timezones.first : '—',
               ),
               _InfoItem(
                 Icons.currency_exchange,
                 'Currencies',
-                country.currencies.isNotEmpty ? country.currencies.first.split('(')[0] : 'N/A',
+                widget.country.currencies.isNotEmpty
+                    ? widget.country.currencies.first.split('(')[0].trim()
+                    : '—',
               ),
-            ]),
+            ], theme),
 
-            const SizedBox(height: 24),
+            SizedBox(height: AppSpacing.xl(context)),
 
             // Section 4: Full Lists
-            _buildSectionHeader('Detailed Records'),
-            _buildDetailedTile('All Languages', country.languages.join(', ')),
-            _buildDetailedTile('All Currencies', country.currencies.join(', ')),
-            if (country.borders.isNotEmpty)
-              _buildDetailedTile('Border Countries', country.borders.join(', ')),
+            _buildSectionHeader(context, 'Detailed Records', theme),
+            _buildDetailedTile(
+              context,
+              'All Languages',
+              widget.country.languages.join(', '),
+              theme,
+            ),
+            _buildDetailedTile(
+              context,
+              'All Currencies',
+              widget.country.currencies.join(', '),
+              theme,
+            ),
+            if (widget.country.borders.isNotEmpty)
+              _buildDetailedTile(
+                context,
+                'Border Countries',
+                widget.country.borders.join(', '),
+                theme,
+              ),
 
-            const SizedBox(height: 40),
+            if (_heritageSites.isNotEmpty) ...[
+              SizedBox(height: AppSpacing.xl(context)),
+              _buildSectionHeader(context, 'UNESCO Heritage Sites', theme),
+              ..._heritageSites.map((site) => HeritageCard(site: site, theme: theme)),
+            ],
+
+            SizedBox(height: AppSpacing.xxl(context)),
           ],
         ),
       ),
@@ -131,120 +280,72 @@ class DetailsScreen extends StatelessWidget {
     return number.toString();
   }
 
-  Widget _buildSectionHeader(String title) {
+  Widget _buildSectionHeader(BuildContext context, String title, ThemeData theme) {
     return Padding(
-      padding: const EdgeInsets.only(bottom: 12),
+      padding: EdgeInsets.only(bottom: AppSpacing.sm(context)),
       child: Text(
         title,
-        style: GoogleFonts.poppins(fontSize: 18, fontWeight: FontWeight.w600, color: Colors.indigo),
+        style: theme.textTheme.titleMedium?.copyWith(color: theme.colorScheme.primary),
       ),
     );
   }
 
-  Widget _buildInfoGrid(List<_InfoItem> items) {
+  Widget _buildInfoGrid(BuildContext context, List<_InfoItem> items, ThemeData theme) {
+    final double spacing = AppSpacing.md(context);
+    final double cellWidth =
+        (MediaQuery.sizeOf(context).width - AppSpacing.lg(context) * 2 - spacing) / 2;
     return GridView.builder(
       shrinkWrap: true,
       physics: const NeverScrollableScrollPhysics(),
-      gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
+      gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
         crossAxisCount: 2,
-        crossAxisSpacing: 16,
-        mainAxisSpacing: 16,
-        childAspectRatio: 2.2,
+        crossAxisSpacing: spacing,
+        mainAxisSpacing: spacing,
+        childAspectRatio: cellWidth / AppSpacing.infoCellHeight(context),
       ),
       itemCount: items.length,
       itemBuilder: (context, index) {
         final item = items[index];
-        return Container(
-          padding: const EdgeInsets.all(12),
-          decoration: BoxDecoration(
-            color: Colors.white,
-            borderRadius: BorderRadius.circular(20),
-            boxShadow: [
-              BoxShadow(
-                color: Colors.black.withValues(alpha: 0.02),
-                blurRadius: 10,
-                offset: const Offset(0, 4),
-              ),
-            ],
-          ),
-          child: Row(
-            children: [
-              Container(
-                padding: const EdgeInsets.all(8),
-                decoration: BoxDecoration(
-                  color: Colors.indigo.withValues(alpha: 0.1),
-                  borderRadius: BorderRadius.circular(12),
-                ),
-                child: Icon(item.icon, size: 20, color: Colors.indigo),
-              ),
-              const SizedBox(width: 12),
-              Expanded(
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: [
-                    Text(
-                      item.label,
-                      style: GoogleFonts.poppins(
-                        fontSize: 10,
-                        color: Colors.grey,
-                        fontWeight: FontWeight.w500,
-                      ),
-                    ),
-                    Text(
-                      item.value,
-                      style: GoogleFonts.poppins(
-                        fontSize: 13,
-                        fontWeight: FontWeight.w600,
-                        color: const Color(0xFF1E2432),
-                      ),
-                      overflow: TextOverflow.ellipsis,
-                    ),
-                  ],
-                ),
-              ),
-            ],
-          ),
-        );
+        return InfoTile(icon: item.icon, label: item.label, value: item.value, theme: theme);
       },
     );
   }
 
-  Widget _buildDetailedTile(String title, String content) {
+  Widget _buildDetailedTile(BuildContext context, String title, String content, ThemeData theme) {
+    final isDark = theme.brightness == Brightness.dark;
     return Container(
       width: double.infinity,
-      margin: const EdgeInsets.only(bottom: 12),
-      padding: const EdgeInsets.all(20),
+      margin: EdgeInsets.only(bottom: AppSpacing.sm(context)),
+      padding: EdgeInsets.all(AppSpacing.lg(context)),
       decoration: BoxDecoration(
-        color: Colors.white,
+        color: isDark ? theme.colorScheme.surfaceContainer : Colors.white,
         borderRadius: BorderRadius.circular(20),
-        boxShadow: [
-          BoxShadow(
-            color: Colors.black.withValues(alpha: 0.02),
-            blurRadius: 10,
-            offset: const Offset(0, 4),
-          ),
-        ],
+        boxShadow: isDark
+            ? []
+            : [
+                BoxShadow(
+                  color: Colors.black.withValues(alpha: 0.02),
+                  blurRadius: 10,
+                  offset: const Offset(0, 4),
+                ),
+              ],
       ),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           Text(
             title,
-            style: GoogleFonts.poppins(
-              fontSize: 12,
-              color: Colors.grey,
-              fontWeight: FontWeight.w500,
+            style: theme.textTheme.labelMedium?.copyWith(
+              color: Colors.black,
+              fontWeight: FontWeight.bold,
             ),
           ),
-          const SizedBox(height: 8),
+          SizedBox(height: AppSpacing.xxs(context)),
           Text(
-            content.isEmpty ? 'N/A' : content,
-            style: GoogleFonts.poppins(
-              fontSize: 15,
-              color: const Color(0xFF1E2432),
+            content.isEmpty ? '—' : content,
+            style: theme.textTheme.bodyMedium?.copyWith(
+              color: const Color(0xFF344535),
               fontWeight: FontWeight.w500,
-              height: 1.5,
             ),
           ),
         ],
