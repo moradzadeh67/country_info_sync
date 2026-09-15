@@ -46,9 +46,6 @@ app.*.map.json
 
 # AI Agent & Internal Docs
 .artifacts/
-PROJECT_SPEC.md
-AGENTS.md
-NOTEBOOK/
 *.artifact.md
 
 # Widget Preview related
