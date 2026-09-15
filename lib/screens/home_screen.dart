@@ -169,7 +169,7 @@ class _HomeScreenState extends State<HomeScreen> {
           style: theme.textTheme.headlineSmall?.copyWith(color: Colors.white),
         ),
         elevation: 0,
-        backgroundColor: isDark ? const Color(0xFF1A1A2E) : const Color(0xFF6373BF),
+        backgroundColor: const Color(0xFF1A1A2E),
         foregroundColor: Colors.white,
         actions: [
           IconButton(
@@ -192,14 +192,14 @@ class _HomeScreenState extends State<HomeScreen> {
         bottom: PreferredSize(
           preferredSize: const Size.fromHeight(80),
           child: Container(
-            color: isDark ? const Color(0xFF1A1A2E) : const Color(0xFF6373BF),
+            color: const Color(0xFF1A1A2E),
             padding: EdgeInsets.symmetric(
               horizontal: AppSpacing.lg(context),
               vertical: AppSpacing.xs(context),
             ),
             child: Container(
               decoration: BoxDecoration(
-                color: isDark ? Colors.transparent : Colors.white,
+                color: Colors.transparent,
                 borderRadius: BorderRadius.circular(16),
                 border: isDark ? Border.all(color: Colors.white24, width: 1) : null,
                 boxShadow: isDark
@@ -221,15 +221,12 @@ class _HomeScreenState extends State<HomeScreen> {
                   hintStyle: theme.textTheme.bodyMedium?.copyWith(
                     color: isDark ? Colors.white38 : Colors.grey,
                   ),
-                  prefixIcon: Icon(
-                    Icons.search,
-                    color: isDark ? Colors.amber : const Color(0xFF6373BF),
-                  ),
+                  prefixIcon: Icon(Icons.search, color: Colors.amber),
                   filled: isDark,
                   fillColor: const Color(0xFF1A1A2E),
                   border: OutlineInputBorder(
                     borderRadius: BorderRadius.circular(16),
-                    borderSide: const BorderSide(color: Colors.transparent),
+                    borderSide: const BorderSide(color: Colors.white24),
                   ),
                   contentPadding: EdgeInsets.symmetric(vertical: AppSpacing.md(context)),
                 ),
