@@ -199,8 +199,9 @@ class _HomeScreenState extends State<HomeScreen> {
             ),
             child: Container(
               decoration: BoxDecoration(
-                color: isDark ? const Color(0xFF1A1A2E) : Colors.white,
+                color: isDark ? Colors.transparent : Colors.white,
                 borderRadius: BorderRadius.circular(16),
+                border: isDark ? Border.all(color: Colors.white24, width: 1) : null,
                 boxShadow: isDark
                     ? []
                     : [
@@ -224,7 +225,12 @@ class _HomeScreenState extends State<HomeScreen> {
                     Icons.search,
                     color: isDark ? Colors.amber : const Color(0xFF6373BF),
                   ),
-                  border: InputBorder.none,
+                  filled: isDark,
+                  fillColor: const Color(0xFF1A1A2E),
+                  border: OutlineInputBorder(
+                    borderRadius: BorderRadius.circular(16),
+                    borderSide: const BorderSide(color: Colors.transparent),
+                  ),
                   contentPadding: EdgeInsets.symmetric(vertical: AppSpacing.md(context)),
                 ),
               ),
