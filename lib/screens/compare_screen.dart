@@ -192,11 +192,14 @@ class CompareScreen extends StatelessWidget {
                   ? CachedNetworkImage(
                       imageUrl: country.flag,
                       fit: BoxFit.cover,
-                      placeholder: (context, url) => const Center(
-                        child: SizedBox(
-                          width: 20,
-                          height: 20,
-                          child: CircularProgressIndicator(strokeWidth: 2),
+                      placeholder: (context, url) => Container(
+                        color: isDark ? Colors.white10 : Colors.grey[200],
+                        child: const Center(
+                          child: SizedBox(
+                            width: 20,
+                            height: 20,
+                            child: CircularProgressIndicator(strokeWidth: 2),
+                          ),
                         ),
                       ),
                       errorWidget: (context, url, error) => const Icon(Icons.flag, size: 40),
