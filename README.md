@@ -1,4 +1,4 @@
-# 🌍 Country Info Sync
+# <img src="assets/images/logo-128.png" width="36" height="36" align="absmiddle" alt="Country Info Sync Logo"> Country Info Sync
 
 A professional, offline-first Flutter application for exploring global country information — with live API data, Wikipedia summaries, and a curated list of UNESCO heritage sites.
 
@@ -104,6 +104,7 @@ Country Info Sync follows a clean layered architecture without external state ma
 
 ### Layer Breakdown
 
+```text
 lib/
 ├── main.dart                     → Entry point: Hive init, theme setup
 ├── models/
@@ -127,6 +128,7 @@ lib/
     ├── details_widgets.dart      → InfoTile, InsightCard, HeritageCard
     ├── shimmer_loading.dart      → Loading skeleton
     └── empty_state_view.dart     → Empty / error state placeholder
+```
 
 ## 📱 Platform Support
 
