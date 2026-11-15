@@ -30,10 +30,11 @@ environment:
 dependencies:
   flutter:
     sdk: flutter
+  material_ui: ^1.11.0
   http: ^1.6.0
   hive: ^2.2.3
   hive_flutter: ^1.1.0
-  google_fonts: ^8.2.1
+  google_fonts: ^9.0.0
   url_launcher: ^6.3.2
   cached_network_image: ^4.0.2
   flutter_localizations:
